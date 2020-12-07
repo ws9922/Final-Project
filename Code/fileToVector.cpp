@@ -1,9 +1,9 @@
 #include "fileToVector.h"
 #include <fstream>
 
-std::vector<std::tuple<std::string, std::string, std::string, std::string>> airport_file_to_vector(const std::string & filename) {
+std::vector<std::vector<std::string>> airport_file_to_vector(const std::string & filename) {
 	std::ifstream text(filename);
-	std::vector<std::tuple<std::string, std::string, std::string>> ret;
+	std::vector<std::vector<std::string>> ret;
 	std::string word;
 	std::string name;
     std::string ID;
@@ -17,7 +17,11 @@ std::vector<std::tuple<std::string, std::string, std::string, std::string>> airp
             name = info[1];
             latitude = info[6];
 			longitude = info[7];
-            std::tuple<std::string, std::string, std::string, std::string> input = std::make_tuple(ID, name, latitude, longitude);
+            std::vector<std::string> input;
+            input.push_back(ID);
+            input.push_back(name);
+            input.push_back(latitude);
+            input.push_back(longitude);
             ret.push_back(input);
         }
 	}
