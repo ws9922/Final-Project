@@ -3,14 +3,27 @@
 #include <ctime>
 
 vertexmaker::vertexmaker() : g_(true, true) {
-    /* Your code goes here! */
-    std::vector<std::tuple<std::string, std::string, std::string>> info = file_to_vector(filename);
-    for(int i = 0; i < info.size(); i++) {
-      g_.insertVertex(v[i]);
+
+    std::vector<std::vector<std::string>> info = airport_file_to_vector(filename);
+    std::map<std::string, std::vector<std::string>> map = route_file_to_map(filename);
+    auto v = file_to_vector("airports.dat.txt");
+    for(int i = 0; i < info.size()-1; i++) {
+      Vertex vtx = get<1>(v[i]);
+      g_.insertVertex(vtx);
+    }
+    for(int i = 0; i < info.size()-1; i++){// insertEdge if route exist
+      string temp = x;
+      while(!map.end()){
+        if(info<0>[i] == map.front() && temp != map.front()){
+          bool temp = g_.insertEdge(info<0>[i],map.front());
+        }
+        temp = map.front();
+        map.pop();
+      }
     }
 }
 void vertexmaker::updateEdgeWeights(const std::vector<Edge> & path) {
-   
+
 }
 
 
