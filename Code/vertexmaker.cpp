@@ -1,29 +1,43 @@
 
 #include "vertexmaker.h"
 #include <ctime>
+#include <iostream>
+#include <string>
+#include <vector>
+#include "fileToVector.h"
+#include "graph.h"
+#include "GetDistance.h"
 
-vertexmaker::vertexmaker() : g_(true, true) {
+using namespace std;
 
-    std::vector<std::vector<std::string>> info = airport_file_to_vector(filename);
-    std::map<std::string, std::vector<std::string>> map = route_file_to_map(filename);
-    auto v = file_to_vector("airports.dat.txt");
-    for(int i = 0; i < info.size()-1; i++) {
-      Vertex vtx = get<1>(v[i]);
-      g_.insertVertex(vtx);
+/*To make Vertex based on the information from the text*/
+vertexmaker::vertexmaker(const std::string & filename): g_(true, true) {
+  /*to get the full information from file*/
+    this->info = airport_file_to_vector(filename);
+    this->route = route_file_to_pair(filename);
+
+  /* insert Vertex one by one*/
+    for(int i = 0; i < (int)info.size(); i++) {
+      string word = info[i][1];
+      g_.insertVertex(word);
     }
-    for(int i = 0; i < info.size()-1; i++){// insertEdge if route exist
-      string temp = x;
-      while(!map.end()){
-        if(info<0>[i] == map.front() && temp != map.front()){
-          bool temp = g_.insertEdge(info<0>[i],map.front());
-        }
-        temp = map.front();
-        map.pop();
-      }
-    }
-}
-void vertexmaker::updateEdgeWeights(const std::vector<Edge> & path) {
-
+  //insert edge
+    for (int i = 0; i < (int)route.size(); i++) {
+       string source = route[i].first;
+       string destination = route[i].second;
+       int sourceid = stoi(source);
+       int destid = stoi(destination);
+       if (!g_.edgeExists(info[sourceid - 1][1], info[destid - 1][1])) {
+          g_.insertEdge(info[sourceid - 1][1], info[destid - 1][1]);
+          int source_latitude = stoi(info[sourceid - 1][2]);
+          int dest_latitude = stoi(info[destid - 1][2]);
+          int source_longitude = stoi(info[sourceid - 1][3]);
+          int dest_longitude = stoi(info[destid - 1][3]);
+          int distance = GetDistance(source_latitude, source_longitude, dest_latitude, dest_longitude);
+          g_.setEdgeWeight(info[sourceid - 1][1], info[destid - 1][1], distance);
+       }
+       
+   }
 }
 
 
