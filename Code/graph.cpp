@@ -238,7 +238,7 @@ Edge Graph::removeEdge(Vertex source, Vertex destination)
     return e;
 }
 
-/*
+
 Edge Graph::setEdgeWeight(Vertex source, Vertex destination, int weight)
 {
     if (assertEdgeExists(source, destination, __func__) == false)
@@ -256,7 +256,7 @@ Edge Graph::setEdgeWeight(Vertex source, Vertex destination, int weight)
 
     return new_edge;
 }
-*/
+
 
 bool Graph::assertVertexExists(Vertex v, string functionName) const
 {

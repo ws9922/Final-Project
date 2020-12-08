@@ -7,8 +7,11 @@
 
 #include <string>
 #include <limits.h>
+#include <tuple>
+#include <iostream>
 
 using std::string;
+using namespace std;
 
 typedef string Vertex;
 

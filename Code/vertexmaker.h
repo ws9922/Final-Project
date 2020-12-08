@@ -5,7 +5,7 @@
 #include <vector>
 #include <algorithm>
 
-#include "fileToString.h"
+#include "fileToVector.h"
 #include "graph.h"
 #include "edge.h"
 
@@ -14,8 +14,8 @@
  */
 class vertexmaker {
 public:
-  int total_Airport = fileToVector.size();
-  vertexmaker(unsigned total_Airport);
+  
+  vertexmaker();
   void updateEdgeWeights(const std::vector<Edge> & path);
 
   const Graph & getGraph() const;
