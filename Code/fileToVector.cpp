@@ -29,10 +29,10 @@ std::vector<std::vector<std::string>> airport_file_to_vector(const std::string &
 	return ret;
 }
 
-std::map<std::string, std::vector<std::string>> route_file_to_map(const std::string & filename) {
+std::vector<std::pair<std::string, std::string>> route_file_to_pair(const std::string & filename) {
 	std::ifstream text(filename);
-	std::map<std::string, std::vector<std::string>> ret;
-    std::vector<std::pair<std::string, std::string>> input;
+	std::vector<std::pair<std::string, std::string>> ret;
+    std::string word;
 	std::string source;
 	std::string destination;
 
@@ -41,17 +41,9 @@ std::map<std::string, std::vector<std::string>> route_file_to_map(const std::str
             std::vector<std::string> info = split(word, ",");
             source = info[3];
             destination = info[5];
-            input.push_back(std::make_pair(source, destination));
+            ret.push_back(std::make_pair(source, destination));
         }
 	}
-    for(size_t i = 0; i < input.size() - 1; i++){
-        std::vector<std::string> dests;
-        dests.push_back(input[i].second);
-        if(input[i].first != input[i + 1].first){
-            ret[input[i].first] = dests;
-            dests.clear();
-        }
-    }
 	return ret;
 }
 
@@ -64,7 +56,7 @@ std::vector<std::string> split(std::string str,std::string pattern) {
      for(int i=0; i<size; i++)
      {
          pos=str.find(pattern,i);
-         if(pos<size){
+         if((int)pos<size){
              std::string s=str.substr(i,pos-i);
              result.push_back(s);
              i=pos+pattern.size()-1;
