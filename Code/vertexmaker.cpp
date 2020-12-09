@@ -11,10 +11,10 @@
 using namespace std;
 
 /*To make Vertex based on the information from the text*/
-vertexmaker::vertexmaker(const std::string & filename): g_(true, true) {
+vertexmaker::vertexmaker(const std::string & filename1,const std::string & filename2): g_(true, true) {
   /*to get the full information from file*/
-    this->info = airport_file_to_vector(filename);
-    this->route = route_file_to_pair(filename);
+    this->info = airport_file_to_vector(filename1);
+    this->route = route_file_to_pair(filename2);
 
   /* insert Vertex one by one*/
     for(int i = 0; i < (int)info.size(); i++) {
@@ -36,7 +36,7 @@ vertexmaker::vertexmaker(const std::string & filename): g_(true, true) {
           int distance = GetDistance(source_latitude, source_longitude, dest_latitude, dest_longitude);
           g_.setEdgeWeight(info[sourceid - 1][1], info[destid - 1][1], distance);
        }
-       
+
    }
 }
 
