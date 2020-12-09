@@ -38,4 +38,6 @@ int main() {
   double d2 = GetDistance(46.2832984924,48.0063018799,55.606201171875,49.278701782227);
   cout << d2 << endl;
   return 0;
+  
+
 }

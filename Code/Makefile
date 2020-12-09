@@ -1,6 +1,6 @@
-
 EXENAME = main
-OBJS = main.o fileToVector.o GetDistance.o
+
+OBJS = main.o fileToVector.o GetDistance.o vertexmaker.o graph.o
 
 CXX = clang++
 CXXFLAGS = $(CS225) -std=c++1y -stdlib=libc++ -c -g -O0 -Wall -Wextra -pedantic
@@ -14,18 +14,57 @@ output_msg: ; $(CLANG_VERSION_MSG)
 $(EXENAME) : output_msg $(OBJS)
 	$(LD) $(OBJS) $(LDFLAGS) -o $(EXENAME)
 
-main.o : main.cpp fileToVector.h fileToVector.cpp GetDistance.h GetDistance.cpp
+main.o : main.cpp fileToVector.h fileToVector.cpp GetDistance.h GetDistance.cpp graph.h graph.cpp vertexmaker.cpp vertexmaker.h
 	$(CXX) $(CXXFLAGS) main.cpp
 
-fileToVector.o : fileToVector.h fileToVector.cpp
+fileToVector.o : fileToVector.h fileToVector.cpp 
 	$(CXX) $(CXXFLAGS) fileToVector.cpp
+
+graph.o : graph.h graph.cpp
+	$(CXX) $(CXXFLAGS) graph.cpp
 
 GetDistance.o : GetDistance.h GetDistance.cpp
 	$(CXX) $(CXXFLAGS) GetDistance.cpp
 
+vertexmaker.o : vertexmaker.h vertexmaker.cpp GetDistance.h GetDistance.cpp fileToVector.h fileToVector.cpp graph.h graph.cpp
+	$(CXX) $(CXXFLAGS) vertexmaker.cpp
+
+PNG.o : cs225/PNG.cpp cs225/PNG.h cs225/HSLAPixel.h cs225/lodepng/lodepng.h
+	$(CXX) $(CXXFLAGS) cs225/PNG.cpp
+
+HSLAPixel.o : cs225/HSLAPixel.cpp cs225/HSLAPixel.h
+	$(CXX) $(CXXFLAGS) cs225/HSLAPixel.cpp
+
+lodepng.o : cs225/lodepng/lodepng.cpp cs225/lodepng/lodepng.h
+	$(CXX) $(CXXFLAGS) cs225/lodepng/lodepng.cpp
 
 
 
 
+ccred=$(shell echo -e "\033[0;31m")
+ccyellow=$(shell echo -e "\033[0;33m")
+ccend=$(shell echo -e "\033[0m")
+
+IS_EWS=$(shell hostname | grep "ews.illinois.edu")
+IS_CORRECT_CLANG=$(shell clang -v 2>&1 | grep "version 6")
+ifneq ($(strip $(IS_EWS)),)
+ifeq ($(strip $(IS_CORRECT_CLANG)),)
+CLANG_VERSION_MSG = $(error $(ccred) On EWS, please run 'module load llvm/6.0.1' first when running CS225 assignments. $(ccend))
+endif
+else
+CLANG_VERSION_MSG = $(warning $(ccyellow) Looks like you are not on EWS. Be sure to test on EWS before the deadline. $(ccend))
+endif
 
 
+# Be sure to add output_msg as dependency target for your `intro` binary
+
+test: output_msg tests.o PNG.o HSLAPixel.o lodepng.o fileToVector.o GetDistance.o vertexmaker.o graph.o
+	$(LD) PNG.o HSLAPixel.o lodepng.o tests.o fileToVector.o GetDistance.o vertexmaker.o graph.o  $(LDFLAGS) -o test
+
+tests.o: tests/tests.cpp tests/catch.hpp cs225/PNG.h cs225/HSLAPixel.h GetDistance.h GetDistance.cpp fileToVector.h fileToVector.cpp vertexmaker.h vertexmaker.cpp graph.h graph.cpp
+	$(CXX) $(CXXFLAGS) tests/tests.cpp
+    
+.PHONY: output_msg
+
+clean :
+	-rm -f *.o $(EXENAME) test
