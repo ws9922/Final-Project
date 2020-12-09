@@ -11,7 +11,7 @@
 
 
 TEST_CASE("file to vector working properly", "[weight=1][part=1]") {
-  this->info = airport_file_to_vector(filename);
+  this->info = airport_file_to_vector("airports.dat.txt");
   string str = to_string(int i = 99);
   REQUIRE( info[99][0] == str );
 }
@@ -42,7 +42,6 @@ TEST_CASE("constructor creates the correct edges", "[weight=1][part=1]") {
   REQUIRE( g.edgeExists("Domodedovo International airport", "Kazan International Airport"));
 }
 
-*/
 /*
 first test case
 2966
@@ -53,8 +52,7 @@ first48.0063018799
 "Kazan International Airport"
 55.606201171875
 49.278701782227
-*/
-/*
+---------
 second test case
 4029
 2990
