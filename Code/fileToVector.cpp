@@ -6,6 +6,11 @@
 #include <vector>
 #include <map>
 
+/*
+This is a function that only read the name and the ID
+@param    filename  file containing the abpve information
+@return   Airport's ID
+*/
 std::map<std::string, std::string> name_map_to_ID(const std::string & filename) {//create a map that have the airports' name and ID
     std::ifstream text(filename);//set up
     std::map<std::string, std::string> ret;
@@ -26,7 +31,11 @@ std::map<std::string, std::string> name_map_to_ID(const std::string & filename) 
 
 	return ret;
 }
-
+/* 
+* this is a function that will read from file and 
+* store the airport ID, name, it's longitude and altitude in the vector
+* @param    filename  file containing the abpve information
+*/
 std::map<std::string, std::vector<std::string>> airport_file_to_vector(const std::string & filename) {//create a vector that have the ID, airports' name and it's longitude and altitude
 	std::ifstream text(filename);//set up
 	std::map<std::string, std::vector<std::string>> ret;
@@ -55,7 +64,12 @@ std::map<std::string, std::vector<std::string>> airport_file_to_vector(const std
 
 	return ret;
 }
-
+/* 
+* this is a function that will read from file and 
+* store the two airports' ID in the same place, which will represent 
+* the source and destination Airport's ID
+* @param    filename  file containing the abpve information
+*/
 std::vector<std::pair<std::string, std::string>> route_file_to_pair(const std::string & filename) {//create a vector that have the source and destination ID
 	std::ifstream text(filename);//set up
 	std::vector<std::pair<std::string, std::string>> ret;
@@ -77,6 +91,8 @@ std::vector<std::pair<std::string, std::string>> route_file_to_pair(const std::s
 * this is a helper function,
 * which will let us read from file and take out the things between two comma
 * and put it in a vector in order.
+* @param    str       one line of text in the file
+* @return   pattern   split base on what
 */
 std::vector<std::string> split(std::string str,std::string pattern) {
 	std::ifstream text(filename);//set up
