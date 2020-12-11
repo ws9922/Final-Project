@@ -1,12 +1,13 @@
 #include "GetDistance.h"
 #include <cmath>
 #include <math.h>
+
 /*
 * this is a function changing the latitude and longtitude in to radius
 * @param  d   longitude or latitude inputed
 * @return The changed longitude or latitude value
 */
-const double EARTH_RADIUS = 6378.137;//地球半径,radius of the earth
+const double EARTH_RADIUS = 6378.137;//地球半径，Earth radius
 double rad(double d)
 {
    return d * M_PI / 180.0;
@@ -20,7 +21,7 @@ double rad(double d)
 * @param  lng1    longitude of the source airport
 * @param  lat2    latitude of the destination airport
 * @param  lng2    longitude of the destination airport
-* @return s       the distance between two points
+* @return s       the distance between two points in Kilometer 
 */
 double GetDistance(double lat1, double lng1, double lat2, double lng2)
 {

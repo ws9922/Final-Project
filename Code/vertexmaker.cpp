@@ -1,9 +1,4 @@
-/*
-* this is our major coding file for this final project, it includes all three required algorithms
-* First we created the graph,and using bfs determine if the two nodes should be connected or not
-* Then we implement the Dijkstra’s Algorithm, to find the shortest path
-* Finally we used the landmark algotithm to create the final route for the travelor
-*/
+
 #include "vertexmaker.h"
 #include <ctime>
 #include <iostream>
@@ -25,8 +20,9 @@ using namespace std;
 * In this function we created the graph, through read from file we first created all the nodes
 * in the second part of the function we inserted edge, by traverse through info, to see match source and destination ID
 * After finding the two nodes we insert edge between them, and by using the get distance function we update the edge weights
+* @param filename1       airport dataset
+* @param filename2       route dataset
 */
-
 /*To make Vertex based on the information from the text*/
 vertexmaker::vertexmaker(const std::string & filename1,const std::string & filename2): g_(true, true) {
   /*to get the full information from file*/
@@ -37,7 +33,6 @@ vertexmaker::vertexmaker(const std::string & filename1,const std::string & filen
   /* insert Vertex one by one*/
     for(std::pair<std::string, std::vector<std::string>> airport : info) {
       string name = airport.second[0];
-      this->verify[name] = false;
       connected[name] = false;
       g_.insertVertex(name);
     }
@@ -56,15 +51,24 @@ vertexmaker::vertexmaker(const std::string & filename1,const std::string & filen
       }
    }
 }
-
+/*
+ * Helper function，calculating the shortest path between the source and dest airports
+ * @param   source    source airport's name
+ * @param   dest      destination airport's name
+ * @param   g         input graph
+ * @return  shortestPath_(g_, source, dest)    g_is the graph created, the vertex include source, destination, and stop's airportname
+ */
 std::pair<int, std::vector<Vertex> > vertexmaker::shortestPath(Vertex source, Vertex dest){
   return shortestPath_(g_, source, dest);
 }
 
-/**
+/*
  * Helper function，calculating the shortest path between the source and dest airports
+ * @param   source    source airport's name
+ * @param   dest      destination airport's name
+ * @param   g         input graph
+ * @return  pair<int,vertex>    int says the path length, the vertex include source, destination, and stop's airportname
  */
- 
 std::pair<int, std::vector<Vertex> > vertexmaker::shortestPath_(Graph g, Vertex source, Vertex dest){
   if(!ifPath(source, dest)){
     std::vector<Vertex> empty;
@@ -131,11 +135,13 @@ const Graph & vertexmaker::getGraph() const {
 
 /*
 * This function will draw the route on the graph, from the helper funtion shortestPath_ above,
-* we found the the two airports, and get the latitude and longtitude of those two airports,
-* convert it into a retangular pic and make it with red dot. and mark the path black by loop
-* through the length of longtitude and latitude
+* we found the the two airports, and get the latitude and longitude of those two airports,
+* convert it into scale and mark it with red dot.
+* @param    inputFile     base picture
+* @param    source        source name of the airport
+* @param    dest          destination name of the airport
+* @return   inputpicture  the final PNG created
 */
-
 PNG vertexmaker::drawPNG(std::string inputFile, Vertex source, Vertex dest) {
     cs225::PNG inputpicture;
     inputpicture.readFromFile(inputFile);
@@ -155,24 +161,22 @@ PNG vertexmaker::drawPNG(std::string inputFile, Vertex source, Vertex dest) {
          secondLatitude = latitude(secondLatitude);
          firstLongitude = longitude(firstLongitude);
          secondLongitude = longitude(secondLongitude);
-         //mark the source airport
          for(int i = firstLatitude - 5; i < firstLatitude + 5; i++) {
            for(int j = firstLongitude - 5; j < firstLongitude + 5; j++) {
            inputpicture.getPixel(j, i) = redPixel;
          }
          }
-         //mark the destination airport
          for(int i = secondLatitude - 5; i < secondLatitude+ 5; i++) {
            for(int j = secondLongitude - 5; j < secondLongitude + 5; j++) {
            inputpicture.getPixel(j, i) = redPixel;
          }
          }
-         //insert the route using black
+
          int latitudesmall = min(firstLatitude,secondLatitude);
          int longitudesmall = min(secondLongitude, firstLongitude);
          int latitudebig = max(firstLatitude, secondLatitude);
          int longitudebig = max(secondLongitude, firstLongitude);
-         if (latitudesmall == firstLatitude) {//two big cases where source is on left or on right of dest
+         if (latitudesmall == firstLatitude) {
          for(int i = latitudesmall; i < latitudebig; i++) {
            for(int j = firstLongitude; j < firstLongitude + 5; j++) {
            inputpicture.getPixel(j, i)= blackPixel;
@@ -196,29 +200,16 @@ PNG vertexmaker::drawPNG(std::string inputFile, Vertex source, Vertex dest) {
            }
          }
          }
-         /*if(firstLongitude == longitudesmall) {
-         for(int i = longitudesmall; i < longitudebig; i++) {
-           for (int j = firstLatitude; j < firstLatitude + 5; j++) {
-           inputpicture.getPixel(i, j)= blackPixel;
-           }
-         }
-        } else {
-          for(int i = longitudesmall; i < longitudebig; i++) {
-           for (int j = secondLatitude; j < secondLatitude + 5; j++) {
-           inputpicture.getPixel(i, j)= blackPixel;
-           }
-         }
-    }*/
+
     }
-    inputpicture.writeToFile("out.png");//safe the pic to out
+    inputpicture.writeToFile("out.png");
     return inputpicture;
 }
 
-/*
-* helper functions, converting latitude and longtitude, and a bool function check if there
-* are path between the source and dest airports
+/*change latitude and longitude into scale that would fit the base pic
+* @param    a     latitude ro longitude
+* @return   a     scaled
 */
-
 int vertexmaker::latitude(int a) {
   if (a < 0) {
      a = (90 - a) * 10;
@@ -235,8 +226,19 @@ int vertexmaker::longitude(int a) {
   }
   return a;
 }
+
+/*
+* if path exist between the two airports
+* @param    source        source name of the airport
+* @param    dest          destination name of the airport
+* @return   bool          if path exist or not
+*/
 bool vertexmaker::ifPath(Vertex source, Vertex dest) {
   queue<Vertex> q;
+  for(std::pair<std::string, std::vector<std::string>> airport : info) {
+      string name = airport.second[0];
+      connected[name] = false;
+    }
   q.push(source);
   connected[source] = true;
   while(!q.empty()) {

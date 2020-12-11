@@ -10,6 +10,9 @@
 #include <iostream>
 
 
+
+
+
 TEST_CASE("file to vector working properly", "[weight=1][part=1]") {
   auto info = airport_file_to_vector("airports.dat.txt");
   REQUIRE( info["1"][0] == "Goroka Airport" );
@@ -43,7 +46,7 @@ TEST_CASE("Set edge weight working properly with given altitude and longtitude(n
   double distance = (int)GetDistance(40.080101013183594, 116.58499908447266, 23.39240074157715, 113.29900360107422);
   vertexmaker myVertex("airports.dat.txt","routes.dat.txt");
   const Graph & g = myVertex.getGraph();
-
+  REQUIRE( g.getEdgeWeight("Beijing Capital International Airport", "Guangzhou Baiyun International Airport") == distance);
   REQUIRE( g.edgeExists("Beijing Capital International Airport", "Guangzhou Baiyun International Airport") == true);
   REQUIRE( g.getEdgeWeight("Beijing Capital International Airport", "Guangzhou Baiyun International Airport") == distance);
 }
@@ -53,6 +56,17 @@ TEST_CASE("constructor creates the correct edges", "[weight=1][part=1]") {
   vertexmaker vertexmaker("airports.dat.txt","routes.dat.txt");
 
   const Graph& g = vertexmaker.getGraph();
+  REQUIRE( g.vertexExists("Beijing Capital International Airport"));
+  REQUIRE( g.vertexExists("Pope Field"));
+  REQUIRE( g.vertexExists("Huron Regional Airport"));
+  REQUIRE( g.vertexExists("Boeing Field King County International Airport"));
+  REQUIRE( g.vertexExists("Yakima Air Terminal McAllister Field"));
+  REQUIRE( g.vertexExists("Islita Airport"));
+  REQUIRE( g.vertexExists("Yakima Air Terminal McAllister Field"));
+  REQUIRE( g.vertexExists("Vanua Balavu Airport"));
+  REQUIRE( g.vertexExists("Valesdir Airport"));
+  REQUIRE( g.vertexExists("Milingimbi Airport"));
+  REQUIRE( g.vertexExists("Allstedt Airport"));
   REQUIRE( g.edgeExists("Astrakhan Airport","Kazan International Airport") == true);
   REQUIRE( g.edgeExists("Domodedovo International Airport", "Kazan International Airport") == true);
 }
@@ -64,26 +78,19 @@ TEST_CASE("Test Dijkstra's Algorithm works properly", "[weight=1][part=1]") {
 
 }
 
-// TEST_CASE("Testing simple backflow", "[valgrind][weight=1]") {
-//   Graph g = Graph(true,true);
 
-//   g.insertEdge("a","b");
-//   g.setEdgeWeight("a","b",10);
-//   g.insertEdge("a","c");
-//   g.setEdgeWeight("a","c",10);
-//   g.insertEdge("b","c");
-//   g.setEdgeWeight("b","c",5);
-//   g.insertEdge("b","d");
-//   g.setEdgeWeight("b","d",15);
-//   g.insertEdge("c","d");
-//   g.setEdgeWeight("c","d",10);
-//   vertexmaker vertexmaker("airports.dat.txt","routes.dat.txt");
-//   pair<int,vector<Vertex>> p = vertexmaker.shortestPath("a", "b");
-//   int result = 20;
-//   vector<Vertex> v;
-//   v.push_back("a");
-//   v.push_back("c");
-//   v.push_back("d");
-//   REQUIRE(result == p.first);
-//   REQUIRE(v == p.second);
-// }
+TEST_CASE("Test Connected Algorithm works properly", "[weight=1][part=1]") {
+  vertexmaker myVertex("airports.dat.txt","routes.dat.txt");
+  bool path = myVertex.ifPath("Beijing Capital International Airport", "Guangzhou Baiyun International Airport");
+  bool track =  myVertex.ifPath("Keflavik International Airport" ,  "Patreksfjörður Airport");
+  bool a = myVertex.ifPath("Santa Barbara Municipal Airport", "Chicago O'Hare International Airport");
+  bool b = myVertex.ifPath("Surat Thani Airport","Funafuti International Airport");
+  REQUIRE(a == true);
+  REQUIRE(b == true);
+  REQUIRE(path == true);
+  REQUIRE(track == false);
+}
+
+
+
+
