@@ -25,7 +25,7 @@ class myComparator{
       int operator() (std::pair<Vertex, int> p1, std::pair<Vertex, int> p2){
             return p1.second > p2.second;
       }
-  }; 
+  };
 
 std::pair<int, std::vector<Vertex> >shortestPath_(Graph g, Vertex source, Vertex dest){
   int distances = 0;
@@ -71,7 +71,7 @@ std::pair<int, std::vector<Vertex> >shortestPath_(Graph g, Vertex source, Vertex
     path.push_back(source);
   }
   std::reverse(path.begin(),path.end());
-  
+
   return std::make_pair(distances, path);
 }
 
@@ -84,7 +84,7 @@ int main() {
   //   cout << "this is longitude " << v[ID][1]<< endl;
   //   cout << "this is latitude " << v[ID][2]<< endl;
   // }
-  
+
   // auto info = route_file_to_pair("routes.dat.txt");
   // for(int i = 1; i < 6; i++) {
   //   cout << "this is source ID  " << info[i].first << endl;
@@ -97,7 +97,7 @@ int main() {
   // cout << info[171].second << endl;
   // cout<< v[info[171].second][0] << endl;
 
-  
+
   // Graph g = Graph(true,false);
   // g.insertVertex("Siebel");
   // g.insertVertex("Rantoul");
@@ -138,14 +138,14 @@ int main() {
   // g.insertEdge("Chicago", "Cloudgate");
   // g.setEdgeWeight("Chicago", "Cloudgate", 1);
 
-  
+
   // pair<int,vector<Vertex>> p = shortestPath_(g, "Siebel", "Rantoul");
   // cout<<p.first<<endl;
   // for(Vertex & v : p.second){
   //   cout<<v<<endl;
   //  }
-  
- 
+
+
   vertexmaker myVertex("airports.dat.txt","routes.dat.txt");
   auto shortestPath = myVertex.shortestPath("Keflavik International Airport", "Patreksfjörður Airport");
   cout<< shortestPath.first<<endl;

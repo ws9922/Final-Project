@@ -9,30 +9,6 @@
 
 #include <iostream>
 
-/*
-first test case
-2965
-2990
-first"Astrakhan Airport"
-first46.2832984924
-first48.0063018799
-"Kazan International Airport"
-55.606201171875
-49.278701782227
----------
-second test case
-4029
-2990
-"Kazan International Airport"
-55.606201171875
-49.278701782227
-first"Domodedovo International Airport"
-first55.40879821777344
-first37.90629959106445
-515.851
-*/
-
-
 
 TEST_CASE("file to vector working properly", "[weight=1][part=1]") {
   auto info = airport_file_to_vector("airports.dat.txt");
@@ -111,27 +87,3 @@ TEST_CASE("Test Dijkstra's Algorithm works properly", "[weight=1][part=1]") {
 //   REQUIRE(result == p.first);
 //   REQUIRE(v == p.second);
 // }
-
-/*
-first test case
-2965
-2990
-first"Astrakhan Airport"
-first46.2832984924
-first48.0063018799
-"Kazan International Airport"
-55.606201171875
-49.278701782227
----------
-second test case
-4029
-2990
-"Kazan International Airport"
-55.606201171875
-49.278701782227
-first"Domodedovo International Airport"
-first55.40879821777344
-first37.90629959106445
-515.851
-*/
-

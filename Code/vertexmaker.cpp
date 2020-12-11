@@ -1,4 +1,9 @@
-
+/*
+* this is our major coding file for this final project, it includes all three required algorithms
+* First we created the graph,and using bfs determine if the two nodes should be connected or not
+* Then we implement the Dijkstra’s Algorithm, to find the shortest path
+* Finally we used the landmark algotithm to create the final route for the travelor
+*/
 #include "vertexmaker.h"
 #include <ctime>
 #include <iostream>
@@ -15,6 +20,12 @@
 #include <limits>
 using namespace cs225;
 using namespace std;
+
+/*
+* In this function we created the graph, through read from file we first created all the nodes
+* in the second part of the function we inserted edge, by traverse through info, to see match source and destination ID
+* After finding the two nodes we insert edge between them, and by using the get distance function we update the edge weights
+*/
 
 /*To make Vertex based on the information from the text*/
 vertexmaker::vertexmaker(const std::string & filename1,const std::string & filename2): g_(true, true) {
@@ -51,8 +62,9 @@ std::pair<int, std::vector<Vertex> > vertexmaker::shortestPath(Vertex source, Ve
 }
 
 /**
- * Helper function
+ * Helper function，calculating the shortest path between the source and dest airports
  */
+ 
 std::pair<int, std::vector<Vertex> > vertexmaker::shortestPath_(Graph g, Vertex source, Vertex dest){
   if(!ifPath(source, dest)){
     std::vector<Vertex> empty;
@@ -117,6 +129,13 @@ const Graph & vertexmaker::getGraph() const {
   return g_;
 }
 
+/*
+* This function will draw the route on the graph, from the helper funtion shortestPath_ above,
+* we found the the two airports, and get the latitude and longtitude of those two airports,
+* convert it into a retangular pic and make it with red dot. and mark the path black by loop
+* through the length of longtitude and latitude
+*/
+
 PNG vertexmaker::drawPNG(std::string inputFile, Vertex source, Vertex dest) {
     cs225::PNG inputpicture;
     inputpicture.readFromFile(inputFile);
@@ -136,22 +155,24 @@ PNG vertexmaker::drawPNG(std::string inputFile, Vertex source, Vertex dest) {
          secondLatitude = latitude(secondLatitude);
          firstLongitude = longitude(firstLongitude);
          secondLongitude = longitude(secondLongitude);
+         //mark the source airport
          for(int i = firstLatitude - 5; i < firstLatitude + 5; i++) {
            for(int j = firstLongitude - 5; j < firstLongitude + 5; j++) {
            inputpicture.getPixel(j, i) = redPixel;
          }
          }
+         //mark the destination airport
          for(int i = secondLatitude - 5; i < secondLatitude+ 5; i++) {
            for(int j = secondLongitude - 5; j < secondLongitude + 5; j++) {
            inputpicture.getPixel(j, i) = redPixel;
          }
          }
-         
+         //insert the route using black
          int latitudesmall = min(firstLatitude,secondLatitude);
          int longitudesmall = min(secondLongitude, firstLongitude);
          int latitudebig = max(firstLatitude, secondLatitude);
          int longitudebig = max(secondLongitude, firstLongitude);
-         if (latitudesmall == firstLatitude) {
+         if (latitudesmall == firstLatitude) {//two big cases where source is on left or on right of dest
          for(int i = latitudesmall; i < latitudebig; i++) {
            for(int j = firstLongitude; j < firstLongitude + 5; j++) {
            inputpicture.getPixel(j, i)= blackPixel;
@@ -189,9 +210,15 @@ PNG vertexmaker::drawPNG(std::string inputFile, Vertex source, Vertex dest) {
          }
     }*/
     }
-    inputpicture.writeToFile("out.png");
+    inputpicture.writeToFile("out.png");//safe the pic to out
     return inputpicture;
 }
+
+/*
+* helper functions, converting latitude and longtitude, and a bool function check if there
+* are path between the source and dest airports
+*/
+
 int vertexmaker::latitude(int a) {
   if (a < 0) {
      a = (90 - a) * 10;

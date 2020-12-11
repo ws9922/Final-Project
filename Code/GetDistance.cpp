@@ -3,12 +3,17 @@
 #include <math.h>
 
 
-const double EARTH_RADIUS = 6378.137;//地球半径
+const double EARTH_RADIUS = 6378.137;//地球半径,radius of the earth
 double rad(double d)
 {
    return d * M_PI / 180.0;
 }
-
+/*
+* this is a function calculating the distance between two airports,
+* take out both of its latitude and longitude,and first convert it using the above function
+* then by applying the equation we found online to calculate the linear distance between two point
+* finally we scale it and return the distance
+*/
 double GetDistance(double lat1, double lng1, double lat2, double lng2)
 {
    double radLat1 = rad(lat1);
